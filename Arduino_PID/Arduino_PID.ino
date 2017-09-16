@@ -6,6 +6,8 @@ int pot = A0;
 void setup() { // put your setup code here, to run once:
   pinMode(pin, OUTPUT); // It's necessary to define each pin as
                         // either an INPUT or an OUTPUT
+
+  Serial.begin(9600);
 }
 
 void loop() { // put your main code here, to run repeatedly:
@@ -14,13 +16,14 @@ void loop() { // put your main code here, to run repeatedly:
   int cv = 0; // Create your PID Controller Here
 
   setOutput(cv);
+  Serial.println("PV="+pv+"  CV="+cv);
   delay(10); // Set algorithm frequency to 100hz
 }
 
 // Convenience method for controlling H-bridge
 void setOutput(int value){ // -255<value<255
   int pv = analogRead(pot);
-  if(pv==1023 || pv==0) value = 0; // If pot is at edge, stop output
+  if(pv>=1010 || pv<=10) value = 0; // If pot is at edge, stop output
   
   if(value>0) {
     digitalWrite(motor1, LOW);
