@@ -3,21 +3,40 @@ int motor1 = 0;
 int motor2 = 0;
 int pot = A0;
 
+double Kp = 0;
+double Ki = 0;
+double Kd = 0;
+
 void setup() { // put your setup code here, to run once:
-  pinMode(pin, OUTPUT); // It's necessary to define each pin as
-                        // either an INPUT or an OUTPUT
+  pinMode(motor1, OUTPUT);
+  pinMode(motor2, OUTPUT);
+  pinMode(pot, INPUT);
 
   Serial.begin(9600);
 }
 
+double acc = 0;
+int lastPV = 0;
+
 void loop() { // put your main code here, to run repeatedly:
   int pv = analogRead(pot); // Read pot position with analogRead
 
-  int cv = 0; // Create your PID Controller Here
+  int sp = 500;
+  int error = sp-pv;
+  acc+=error;
+
+  int pTerm = Kp * error;
+  int iTerm = Ki * acc;
+  int dTerm = Kd * (pv-lastPV);
+  int cv = pTerm + iTerm + dTerm;
+
+  lastPV = pv;
 
   setOutput(cv);
-  Serial.println("PV="+pv);
-  Serial.println("CV="+cv);
+  Serial.print("PV=");
+  Serial.println(pv);
+  Serial.print("CV=");
+  Serial.println(cv);
   delay(10); // Set algorithm frequency to 100hz
 }
 
