@@ -16,7 +16,8 @@ void loop() { // put your main code here, to run repeatedly:
   int cv = 0; // Create your PID Controller Here
 
   setOutput(cv);
-  Serial.println("PV="+pv+"  CV="+cv);
+  Serial.println("PV="+pv);
+  Serial.println("CV="+cv);
   delay(10); // Set algorithm frequency to 100hz
 }
 
